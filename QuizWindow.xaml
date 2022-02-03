@@ -1,0 +1,93 @@
+﻿<Window x:Class="WpfQuizManager.QuizWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfQuizManager"
+        mc:Ignorable="d"
+        Title="QuizWindow" Height="445.34" Width="629.156"
+        WindowStartupLocation="CenterScreen"
+        Closed="Window_Closed">
+    <Window.Background>
+        <ImageBrush ImageSource="quiz.jpg" Opacity="0.55"/>
+    </Window.Background>
+    <Grid>
+        <Grid.ColumnDefinitions>
+
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.5*"/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="CurrentQuestion"
+                   Text="{Binding CurrentQuizResult,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window},StringFormat={}{0} }"
+                   Grid.Column="0"
+                   Grid.Row="0"
+                   HorizontalAlignment="Center"
+                   Margin="0,20,0,0"
+                   VerticalAlignment="Top" FontSize="20" FontWeight="Bold"/>
+        <TextBlock x:Name="questionText"
+                   Text="{Binding Question, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                   Grid.Row="1"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Height="auto"
+                   Width="auto" FontSize="18"/>
+        <StackPanel
+            x:Name="groupOfAnswers"
+            
+            Grid.Row="2"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Stretch" 
+            >
+            <RadioButton x:Name="answ1"
+                         Content="{Binding Answers[0], RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                         VerticalAlignment="Center"
+                         VerticalContentAlignment="Center"
+                         Margin="0,0,0,10"
+                         Height="auto"
+                         GroupName="answers" 
+                         FontSize="18"
+                         IsChecked="{Binding Path=AnswersMode[0], Mode=TwoWay}"
+                         />
+            <RadioButton x:Name="answ2"
+                         Content="{Binding Answers[1], RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                         VerticalContentAlignment="Center"
+                         VerticalAlignment="Center"
+                         Margin="0,0,0,10"
+                         GroupName="answers" 
+                         FontSize="18"
+                         IsChecked="{Binding Path=AnswersMode[1], Mode=TwoWay}"
+                         Height="auto"/>
+            <RadioButton x:Name="answ3"
+                         VerticalContentAlignment="Center"
+                         Content="{Binding Answers[2], RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                         VerticalAlignment="Center"
+                         Margin="0,0,0,10"
+                         GroupName="answers" 
+                         FontSize="18"
+                          IsChecked="{Binding Path=AnswersMode[2], Mode=TwoWay}"
+                         Height="auto"/>
+            <RadioButton x:Name="answ4"
+                          Content="{Binding Answers[3], RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                         VerticalContentAlignment="Center"
+                         VerticalAlignment="Center"
+                         Margin="0,0,0,0"
+                         GroupName="answers" 
+                         IsChecked="{Binding Path=AnswersMode[3], Mode=TwoWay}"
+                         FontSize="18"
+                         Height="auto"/>
+        </StackPanel>
+        <Button x:Name="next_finish"
+                Content="Next"
+                Grid.Row="3"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Width="100"
+                Margin="0,0,20,20" FontSize="20"
+                Click="next_finish_Click"/>
+        <Label Name="timerLabel" HorizontalAlignment="Left" Margin="51,23,0,0" VerticalAlignment="Top" Height="24" Width="93"/>
+    </Grid>
+</Window>

@@ -1,0 +1,105 @@
+﻿<Window x:Class="WpfQuizManager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfQuizManager"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="700" OpacityMask="White"
+        WindowStartupLocation="CenterScreen">
+    <Window.Background>
+        <ImageBrush ImageSource="background.jpg" Opacity="0.55"/>
+    </Window.Background>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="0.8*"/>
+            <RowDefinition Height="0.8*"/>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock x:Name="Title" Text="Learn by playing!"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2"
+                   Grid.Row="0"
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center"
+                   FontWeight="Bold" 
+                   FontSize="72" 
+                   Foreground="#FF0F147D"/>
+        <TextBlock Text="username/email:"
+                   Grid.Row="1"
+                   Grid.Column="0"
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Center"
+                   Margin="0,0,5,0" 
+                   Width="130" 
+                   FontSize="16" 
+                   FontWeight="Bold" Foreground="#FFFFDE8A"/>
+        <TextBox x:Name="username"
+                 Grid.Row="1"
+                 Grid.Column="1"
+                 HorizontalAlignment="Left" 
+                 VerticalAlignment="Center"
+                 Margin="0,0,0,0.4" 
+                 Width="130"
+                 />
+        <TextBlock Text="password:"
+                   Grid.Row="2"
+                   Grid.Column="0"
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Center"
+                   Margin="0,0,5,0" 
+                   Width="auto" 
+                   FontSize="16" FontWeight="Bold" Foreground="#FFFFDE8A"
+                   />
+        <PasswordBox
+                    x:Name="password"
+                    Grid.Column="1"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Grid.Row="2"
+                    Width="130"
+                    KeyUp="password_KeyUp"
+                />
+        <CheckBox x:Name="rememberMe"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="2"
+                  Content="Remember me?"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Top"
+                  Grid.Row="3" FontWeight="Bold" Foreground="Black"
+                  />
+        <Button x:Name="logIn"
+                Content="Log in"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Grid.Row="4" 
+                FontWeight="Bold" 
+                Height="25" 
+                Margin="0,0,0,0" 
+                MinWidth="70"
+                Click="logIn_Click"
+                />
+        <Button x:Name="notRegistered"
+                Grid.Row="4"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Content="Not registered yet?"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Margin="0,0,0,5"
+                Height="25"
+                MinWidth="120" FontWeight="Bold"
+                Click="notRegistered_Click"
+                />
+
+    </Grid>
+</Window>

@@ -1,0 +1,540 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="QuizManagerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Answers">
+          <Key>
+            <PropertyRef Name="AnswerID" />
+          </Key>
+          <Property Name="AnswerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionID" Type="int" Nullable="false" />
+          <Property Name="isTheCorrectOne" Type="bit" />
+          <Property Name="Text" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="CategoryID" />
+          </Key>
+          <Property Name="CategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="History">
+          <Key>
+            <PropertyRef Name="HistoryID" />
+          </Key>
+          <Property Name="QuizID" Type="int" Nullable="false" />
+          <Property Name="QuestionID" Type="int" Nullable="false" />
+          <Property Name="wasAnsweredCorrectly" Type="bit" />
+          <Property Name="HistoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Question">
+          <Key>
+            <PropertyRef Name="QuestionID" />
+          </Key>
+          <Property Name="QuestionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SubcategoryID" Type="int" Nullable="false" />
+          <Property Name="Text" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Difficulty" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Quiz">
+          <Key>
+            <PropertyRef Name="QuizID" />
+          </Key>
+          <Property Name="QuizID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="SubcategoryID" Type="int" Nullable="false" />
+          <Property Name="TotalPoints" Type="int" />
+          <Property Name="QuizDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Ranks">
+          <Key>
+            <PropertyRef Name="RankID" />
+          </Key>
+          <Property Name="RankID" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="LowerThreshold" Type="int" Nullable="false" />
+          <Property Name="UppperThreshold" Type="int" />
+        </EntityType>
+        <EntityType Name="Subcategory">
+          <Key>
+            <PropertyRef Name="SubcategoryID" />
+          </Key>
+          <Property Name="SubcategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryID" Type="int" Nullable="false" />
+          <Property Name="SubcategoryName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="HashedPassword" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="RankPoints" Type="int" Nullable="false" />
+          <Property Name="Rank" Type="nvarchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_AnswerForQuestion">
+          <End Role="Question" Type="Self.Question" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Answers" Type="Self.Answers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="QuestionID" />
+            </Principal>
+            <Dependent Role="Answers">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_QuestionInQuiz">
+          <End Role="Question" Type="Self.Question" Multiplicity="1" />
+          <End Role="History" Type="Self.History" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="QuestionID" />
+            </Principal>
+            <Dependent Role="History">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_QuestionOfSubcategory">
+          <End Role="Subcategory" Type="Self.Subcategory" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Question" Type="Self.Question" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subcategory">
+              <PropertyRef Name="SubcategoryID" />
+            </Principal>
+            <Dependent Role="Question">
+              <PropertyRef Name="SubcategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_QuizInHistory">
+          <End Role="Quiz" Type="Self.Quiz" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="History" Type="Self.History" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Quiz">
+              <PropertyRef Name="QuizID" />
+            </Principal>
+            <Dependent Role="History">
+              <PropertyRef Name="QuizID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_QuizOFUser">
+          <End Role="Users" Type="Self.Users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Quiz" Type="Self.Quiz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Quiz">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SubcategoryOfCategory">
+          <End Role="Category" Type="Self.Category" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Subcategory" Type="Self.Subcategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="CategoryID" />
+            </Principal>
+            <Dependent Role="Subcategory">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserRank">
+          <End Role="Ranks" Type="Self.Ranks" Multiplicity="1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ranks">
+              <PropertyRef Name="RankID" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="Rank" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="QuizManagerModelStoreContainer">
+          <EntitySet Name="Answers" EntityType="Self.Answers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="History" EntityType="Self.History" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Quiz" EntityType="Self.Quiz" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ranks" EntityType="Self.Ranks" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Subcategory" EntityType="Self.Subcategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_AnswerForQuestion" Association="Self.FK_AnswerForQuestion">
+            <End Role="Question" EntitySet="Question" />
+            <End Role="Answers" EntitySet="Answers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_QuestionInQuiz" Association="Self.FK_QuestionInQuiz">
+            <End Role="Question" EntitySet="Question" />
+            <End Role="History" EntitySet="History" />
+          </AssociationSet>
+          <AssociationSet Name="FK_QuestionOfSubcategory" Association="Self.FK_QuestionOfSubcategory">
+            <End Role="Subcategory" EntitySet="Subcategory" />
+            <End Role="Question" EntitySet="Question" />
+          </AssociationSet>
+          <AssociationSet Name="FK_QuizInHistory" Association="Self.FK_QuizInHistory">
+            <End Role="Quiz" EntitySet="Quiz" />
+            <End Role="History" EntitySet="History" />
+          </AssociationSet>
+          <AssociationSet Name="FK_QuizOFUser" Association="Self.FK_QuizOFUser">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Quiz" EntitySet="Quiz" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SubcategoryOfCategory" Association="Self.FK_SubcategoryOfCategory">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Subcategory" EntitySet="Subcategory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserRank" Association="Self.FK_UserRank">
+            <End Role="Ranks" EntitySet="Ranks" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="QuizManagerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Answer">
+          <Key>
+            <PropertyRef Name="AnswerID" />
+          </Key>
+          <Property Name="AnswerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionID" Type="Int32" Nullable="false" />
+          <Property Name="isTheCorrectOne" Type="Boolean" />
+          <Property Name="Text" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Question" Relationship="Self.FK_AnswerForQuestion" FromRole="Answers" ToRole="Question" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="CategoryID" />
+          </Key>
+          <Property Name="CategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Subcategories" Relationship="Self.FK_SubcategoryOfCategory" FromRole="Category" ToRole="Subcategory" />
+        </EntityType>
+        <EntityType Name="Question">
+          <Key>
+            <PropertyRef Name="QuestionID" />
+          </Key>
+          <Property Name="QuestionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SubcategoryID" Type="Int32" Nullable="false" />
+          <Property Name="Text" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Difficulty" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Answers" Relationship="Self.FK_AnswerForQuestion" FromRole="Question" ToRole="Answers" />
+          <NavigationProperty Name="Subcategory" Relationship="Self.FK_QuestionOfSubcategory" FromRole="Question" ToRole="Subcategory" />
+          <NavigationProperty Name="Histories" Relationship="QuizManagerModel.FK_QuestionInQuiz" FromRole="Question" ToRole="History" />
+        </EntityType>
+        <EntityType Name="Rank">
+          <Key>
+            <PropertyRef Name="RankID" />
+          </Key>
+          <Property Name="RankID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LowerThreshold" Type="Int32" Nullable="false" />
+          <Property Name="UppperThreshold" Type="Int32" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_UserRank" FromRole="Ranks" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Subcategory">
+          <Key>
+            <PropertyRef Name="SubcategoryID" />
+          </Key>
+          <Property Name="SubcategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryID" Type="Int32" Nullable="false" />
+          <Property Name="SubcategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Category" Relationship="Self.FK_SubcategoryOfCategory" FromRole="Subcategory" ToRole="Category" />
+          <NavigationProperty Name="Questions" Relationship="Self.FK_QuestionOfSubcategory" FromRole="Subcategory" ToRole="Question" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="HashedPassword" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RankPoints" Type="Int32" Nullable="false" />
+          <Property Name="Rank" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Rank1" Relationship="Self.FK_UserRank" FromRole="Users" ToRole="Ranks" />
+          <NavigationProperty Name="Quizs" Relationship="QuizManagerModel.FK_QuizOFUser" FromRole="User" ToRole="Quiz" />
+        </EntityType>
+        <Association Name="FK_AnswerForQuestion">
+          <End Role="Question" Type="Self.Question" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Answers" Type="Self.Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="QuestionID" />
+            </Principal>
+            <Dependent Role="Answers">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SubcategoryOfCategory">
+          <End Role="Category" Type="Self.Category" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Subcategory" Type="Self.Subcategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="CategoryID" />
+            </Principal>
+            <Dependent Role="Subcategory">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_QuestionOfSubcategory">
+          <End Role="Subcategory" Type="Self.Subcategory" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Question" Type="Self.Question" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subcategory">
+              <PropertyRef Name="SubcategoryID" />
+            </Principal>
+            <Dependent Role="Question">
+              <PropertyRef Name="SubcategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserRank">
+          <End Role="Ranks" Type="Self.Rank" Multiplicity="1" />
+          <End Role="Users" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ranks">
+              <PropertyRef Name="RankID" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="Rank" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="QuizManagerEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Answers" EntityType="Self.Answer" />
+          <EntitySet Name="Categories" EntityType="Self.Category" />
+          <EntitySet Name="Questions" EntityType="Self.Question" />
+          <EntitySet Name="Ranks" EntityType="Self.Rank" />
+          <EntitySet Name="Subcategories" EntityType="Self.Subcategory" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_AnswerForQuestion" Association="Self.FK_AnswerForQuestion">
+            <End Role="Question" EntitySet="Questions" />
+            <End Role="Answers" EntitySet="Answers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SubcategoryOfCategory" Association="Self.FK_SubcategoryOfCategory">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="Subcategory" EntitySet="Subcategories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_QuestionOfSubcategory" Association="Self.FK_QuestionOfSubcategory">
+            <End Role="Subcategory" EntitySet="Subcategories" />
+            <End Role="Question" EntitySet="Questions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserRank" Association="Self.FK_UserRank">
+            <End Role="Ranks" EntitySet="Ranks" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+          <EntitySet Name="Histories" EntityType="QuizManagerModel.History" />
+          <AssociationSet Name="FK_QuestionInQuiz" Association="QuizManagerModel.FK_QuestionInQuiz">
+            <End Role="Question" EntitySet="Questions" />
+            <End Role="History" EntitySet="Histories" />
+          </AssociationSet>
+          <EntitySet Name="Quizs" EntityType="QuizManagerModel.Quiz" />
+          <AssociationSet Name="FK_QuizInHistory" Association="QuizManagerModel.FK_QuizInHistory">
+            <End Role="Quiz" EntitySet="Quizs" />
+            <End Role="History" EntitySet="Histories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_QuizOFUser" Association="QuizManagerModel.FK_QuizOFUser">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Quiz" EntitySet="Quizs" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="History">
+          <Key>
+            <PropertyRef Name="HistoryID" />
+          </Key>
+          <Property Name="QuizID" Type="Int32" Nullable="false" />
+          <Property Name="QuestionID" Type="Int32" Nullable="false" />
+          <Property Name="wasAnsweredCorrectly" Type="Boolean" />
+          <Property Name="HistoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Question" Relationship="QuizManagerModel.FK_QuestionInQuiz" FromRole="History" ToRole="Question" />
+          <NavigationProperty Name="Quiz" Relationship="QuizManagerModel.FK_QuizInHistory" FromRole="History" ToRole="Quiz" />
+        </EntityType>
+        <Association Name="FK_QuestionInQuiz">
+          <End Type="QuizManagerModel.Question" Role="Question" Multiplicity="1" />
+          <End Type="QuizManagerModel.History" Role="History" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="QuestionID" />
+            </Principal>
+            <Dependent Role="History">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Quiz">
+          <Key>
+            <PropertyRef Name="QuizID" />
+          </Key>
+          <Property Name="QuizID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="SubcategoryID" Type="Int32" Nullable="false" />
+          <Property Name="TotalPoints" Type="Int32" />
+          <Property Name="QuizDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Histories" Relationship="QuizManagerModel.FK_QuizInHistory" FromRole="Quiz" ToRole="History" />
+          <NavigationProperty Name="User" Relationship="QuizManagerModel.FK_QuizOFUser" FromRole="Quiz" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_QuizInHistory">
+          <End Type="QuizManagerModel.Quiz" Role="Quiz" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="QuizManagerModel.History" Role="History" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Quiz">
+              <PropertyRef Name="QuizID" />
+            </Principal>
+            <Dependent Role="History">
+              <PropertyRef Name="QuizID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_QuizOFUser">
+          <End Type="QuizManagerModel.User" Role="User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="QuizManagerModel.Quiz" Role="Quiz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Quiz">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="QuizManagerModelStoreContainer" CdmEntityContainer="QuizManagerEntities">
+          <EntitySetMapping Name="Answers">
+            <EntityTypeMapping TypeName="QuizManagerModel.Answer">
+              <MappingFragment StoreEntitySet="Answers">
+                <ScalarProperty Name="AnswerID" ColumnName="AnswerID" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+                <ScalarProperty Name="isTheCorrectOne" ColumnName="isTheCorrectOne" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="QuizManagerModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Questions">
+            <EntityTypeMapping TypeName="QuizManagerModel.Question">
+              <MappingFragment StoreEntitySet="Question">
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+                <ScalarProperty Name="SubcategoryID" ColumnName="SubcategoryID" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="Difficulty" ColumnName="Difficulty" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ranks">
+            <EntityTypeMapping TypeName="QuizManagerModel.Rank">
+              <MappingFragment StoreEntitySet="Ranks">
+                <ScalarProperty Name="RankID" ColumnName="RankID" />
+                <ScalarProperty Name="LowerThreshold" ColumnName="LowerThreshold" />
+                <ScalarProperty Name="UppperThreshold" ColumnName="UppperThreshold" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Subcategories">
+            <EntityTypeMapping TypeName="QuizManagerModel.Subcategory">
+              <MappingFragment StoreEntitySet="Subcategory">
+                <ScalarProperty Name="SubcategoryID" ColumnName="SubcategoryID" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="SubcategoryName" ColumnName="SubcategoryName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="QuizManagerModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="HashedPassword" ColumnName="HashedPassword" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="RankPoints" ColumnName="RankPoints" />
+                <ScalarProperty Name="Rank" ColumnName="Rank" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Histories">
+            <EntityTypeMapping TypeName="QuizManagerModel.History">
+              <MappingFragment StoreEntitySet="History">
+                <ScalarProperty Name="HistoryID" ColumnName="HistoryID" />
+                <ScalarProperty Name="wasAnsweredCorrectly" ColumnName="wasAnsweredCorrectly" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+                <ScalarProperty Name="QuizID" ColumnName="QuizID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Quizs">
+            <EntityTypeMapping TypeName="QuizManagerModel.Quiz">
+              <MappingFragment StoreEntitySet="Quiz">
+                <ScalarProperty Name="QuizDate" ColumnName="QuizDate" />
+                <ScalarProperty Name="TotalPoints" ColumnName="TotalPoints" />
+                <ScalarProperty Name="SubcategoryID" ColumnName="SubcategoryID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="QuizID" ColumnName="QuizID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

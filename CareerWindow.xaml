@@ -1,0 +1,70 @@
+﻿<Window x:Class="WpfQuizManager.CareerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfQuizManager"
+        mc:Ignorable="d"
+        Title="CareerWindow" Height="400" Width="600"
+        WindowStartupLocation="CenterScreen"
+        Closed="Window_Closed">
+    <Window.Background>
+        <ImageBrush ImageSource="career.jpg" Opacity="0.55"/>
+    </Window.Background>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <DataGrid x:Name="quizList"
+                  ColumnWidth="*"
+                  IsReadOnly="True"
+                  Grid.Row="0"
+                  Grid.Column="0"
+                  Width="auto"
+                  Height="auto"
+                  Margin="5,5,5,5" 
+                  ItemsSource="{Binding}"
+                  Opacity="0.7"
+                  
+                  SelectionChanged="quizList_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding}" 
+                                Foreground="Black" Width="60" Header="Performance" IsReadOnly="false" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <DataGrid x:Name="quizDetails"
+                  ColumnWidth="*"
+                  IsReadOnly="True"
+                  Grid.Row="0"
+                  Grid.Column="1"
+                  Width="auto"
+                  Height="auto"
+                  Margin="5,5,5,55" 
+                  ItemsSource="{Binding Path=res}"
+                  Opacity="0.7" SelectionChanged="quizDetails_SelectionChanged"
+                  />
+        <Button Content="Delete" 
+                Grid.Column="1" 
+                
+                HorizontalAlignment="Right" 
+                Height="33" 
+                Margin="0,0,10,10" 
+                VerticalAlignment="Bottom"
+                
+                Width="117" 
+                Click="DeleteBtn_Click"/>
+        <Button
+               Content="Export XML"
+                HorizontalAlignment="Right" 
+                Height="33" 
+                Margin="0,0,158,10" 
+                VerticalAlignment="Bottom"
+                Width="117" Grid.Column="1"
+                Click="ExportBtn_Click"/>
+        <Label Name="dateLabel" Content="" Grid.Column="1" HorizontalAlignment="Left" Height="25" Margin="21,181,0,0" VerticalAlignment="Top" Width="64" FontWeight="Light"/>
+    </Grid>
+</Window>
